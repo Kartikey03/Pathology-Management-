@@ -1,17 +1,33 @@
-#PATHLOGY LAB MANAGEMENT SYSTEM -- HORIZON DIAGNOSTICS
-
+#PATHLOGY LAB MANAGEMENT SYSTEM
+import webbrowser #importing webbrowser module
+from datetime import date #importing date module
 from tkinter import *  #importing all modules from tkinter library
 from tkinter import messagebox  #importing messagebox module from tkinter
+from PIL import Image, ImageTk, ImageFilter #importing all modules from PIL library
 import mysql.connector #importing mysql connector module
-con=mysql.connector.connect(host ='localhost', user ='root', password ='') #connection object
+con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003') #connection object
 cur=con.cursor() #cursor object
 
 pbill1 = "Payment Done"
-bg_color='#074463'
+bg_color='#FFFFFF'
 root=Tk()
-root.title('HORIZON DIAGNOSTICS')
+root.title('Pathology Management System')
 root.iconbitmap('D:/lab.ico')
-root.configure(bg=bg_color)
+
+
+image=Image.open('D:/bg.png').convert('RGB')
+
+# Get the window dimensions
+window_width = root.winfo_screenwidth()
+window_height = root.winfo_screenheight()
+
+# Resize the image to fit the window
+image = image.resize((window_width, window_height))
+
+blur=image.filter(ImageFilter.BLUR)
+bgimage= ImageTk.PhotoImage(blur)
+bg_label = Label(root, image=bgimage)
+bg_label.place(x=0, y=0, relwidth=1, relheight=1)
 
 #creating database pathlab
 cur.execute("create database if not exists pathlab")
@@ -38,50 +54,84 @@ def close1():
     
 #about us
 def about():
-    ab=Tk()
+    ab=Toplevel()
     ab.title('About us')
     ab.iconbitmap('D:/info.ico')
-    ab.geometry("5000x5000")
-    ab.configure(bg=bg_color)
+    ab.configure(bg=bg_color) 
+    ab.geometry('1200x600')
 
-    info_label=Label(ab, text="""OUR TEAM 
-As one of the top pathology labs in India, HORIZON DIAGNOSTICS has a very strong focus on hiring and retaining
-top quality manpower to drive our different departments within and outside the labs.
-Despite our size, we maintain an environment that nurtures some of the top thinkers in India in their respective fields of expertise.
-Over 3000 individuals work at the HORIZON DIAGNOSTICS in India with over 55 percent of the staff in laboratory functions.
-We have a qualified team of 147 pathology specialists, 8 Radiologists, 13 Microbiologists, 5 Biochemists and 11 specialists with doctorate degrees.
-Also, there is a growing pool of young leadership from top institutions like AFMC, IIMs, IITs, XLRI, SP JAIN amongst others.
+    # Create a canvas
+    canvas = Canvas(ab)
+    canvas.pack(side=LEFT, fill=BOTH, expand=True)
 
-AN ESTABLISHED BRAND ASSOCIATED WITH QUALITY SERVICES
-We focus on providing patients quality diagnostic healthcare services in India.
-Through our network, we offer patients convenient locations for their diagnostic laboratory services
-and efficient service. With over 3,368 diagnostic tests and related healthcare tests and services offered,
-we believe we are capable of performing substantially all of the diagnostic healthcare tests
-and services currently prescribed by physicians in India. By delivering most accurate reports over the years,
-HORIZON DIAGNOSTICS has earned the reputation of being amongst the most trustworthy and reliable pathology labs in India.
+    # Create a scrollbar
+    scrollbar = Scrollbar(ab, command=canvas.yview)
+    scrollbar.pack(side=RIGHT, fill=Y)
 
-ONE OF INDIA'S TOP DIAGNOSTIC CHAINS
-We have built a national network consisting of our National Reference Laboratory in New Delhi
-along with 190+ other clinical / medical laboratories, 1700+ lab patient service centers
-and 5,000+ pickup points as of March 31, 2017 with the widest test menu of 4500 tests and panels.
-Our network has coverage across India, including metropolitan areas such as New Delhi, Mumbai,
-Bengaluru, Chennai, Hyderabad and Kolkata. We offer access to one o  f the best diagnostic
-pathology services in India through our nationwide network of clinical / medical laboratories
-(including our National Reference Laboratory), lab patient service centers and pickup points.
+    #Configure the canvas to use the scrollbar
+    canvas.configure(yscrollcommand=scrollbar.set)
 
-LABORATORY ACCREDITATIONS
-HORIZON DIAGNOSTICS, Meerut Cantt is NABL certified pathology lab in India.
-It is also among the few Indian laboratories which accredited by CAP (College of American Pathologists)
-and Certified by ISO 9001 (International Organization of Standardization).""",
-                     font=('Comic Sans Ms',12), bg=bg_color, fg='white')
-    info_label.pack() 
+    # Create a frame to contain the widgets
+    frame = Frame(canvas)
+
+    info_label=Label(frame, text="""Project Description:
+
+The Pathology Management System is a sophisticated and user-friendly Python-based program designed to streamline the management of patient records, billing, and receipts. 
+With its intuitive graphical interface, this system simplifies the complexities of pathology management for both patients and administrators.
+Patients can effortlessly add their records, conveniently pay bills through a dedicated bill window, and generate printable bill receipts for reference. 
+The system puts patients in control of their healthcare journey, providing a seamless and efficient experience.
+Administrators have enhanced authority to manage the system effectively. 
+They can add, update, and delete patient details, ensuring accurate and up-to-date records. 
+Administrators can also generate bill receipts for patients, enabling seamless financial transactions. 
+The system empowers administrators with comprehensive tools to handle diverse administrative tasks.
+
+Future Enhancements:
+
+1. Integration with Online Payment Gateways: 
+Enhancing the billing module by integrating popular online payment gateways would offer patients more payment options, 
+ensuring secure and convenient transactions.
+
+2. Electronic Medical Records (EMR) Integration: 
+Integrating the system with electronic medical records systems would enable the seamless exchange of patient data, 
+enhancing the accessibility and accuracy of medical records.
+
+3. Reporting and Analytics: 
+Implementing robust reporting and analytics capabilities would empower administrators to generate valuable insights from system data, 
+facilitating data-driven decision-making and performance tracking.
+
+4. Mobile Application Development: 
+Developing a mobile application would extend accessibility, allowing patients and administrators to access the system on-the-go, 
+improving convenience and user experience.
+
+5. Enhanced Security Measures: 
+Strengthening the system's security measures through data encryption, user authentication, 
+and regular security updates would safeguard patient information and ensure compliance with privacy regulations.
+
+6. Integration with Laboratory Equipment: 
+Integrating the system with laboratory equipment would automate data capture, 
+minimizing errors and enhancing efficiency in the laboratory workflow.
+
+7. Multi-Language Support: 
+Adding multi-language support would cater to diverse users, ensuring inclusivity and improving user satisfaction.
+
+These future enhancements will further optimize the Pathology Management System, enhancing its capabilities, security, and user experience. 
+The project aims to provide a comprehensive and efficient solution for streamlined record-keeping, billing management, and overall pathology administration.""",
+                     font=('Calibri',12), bg=bg_color, fg='black')
+    info_label.pack()
+
+    # Place the frame inside the canvas
+    canvas.create_window(0, 0, anchor=NW, window=frame)
+
+    # Update the scroll region
+    frame.update_idletasks()
+    canvas.configure(scrollregion=canvas.bbox("all"))
     
     
 #update query
 def edit():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
-
+    
     pid = pu_id.get()
     pname = pu_name.get()
     page = pu_age.get()
@@ -109,13 +159,13 @@ def update2():
 
     else:
         global editor
-        editor=Tk()
+        editor=Toplevel()
         editor.title('Update Patient Data')
         editor.iconbitmap('D:/lab.ico')
         editor.geometry("750x450")
         editor.configure(bg=bg_color)
 
-        con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+        con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
         cur=con.cursor()
 
         cur.execute("select * from pat where id = " + update_box.get())
@@ -149,25 +199,25 @@ def update2():
         pu_address.grid(row=6, column=1)
 
         #creating Labels
-        wel_label=Label(editor, text="NOW, YOU CAN UPDATE ANYTHING HERE", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        wel_label=Label(editor, text="NOW, YOU CAN UPDATE ANYTHING HERE", font=('Calibri',15), bg=bg_color, fg='black')
         wel_label.grid(row=0, column=1, pady=50)
         
-        id_label=Label(editor, text="Patient Id :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        id_label=Label(editor, text="Patient Id :", font=('Calibri',15), bg=bg_color, fg='black')
         id_label.grid(row=1, column=0, pady=(10,0))
 
-        name_label=Label(editor, text="Patient Name :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        name_label=Label(editor, text="Patient Name :", font=('Calibri',15), bg=bg_color, fg='black')
         name_label.grid(row=2, column=0)
 
-        age_label=Label(editor, text="Patient Age :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        age_label=Label(editor, text="Patient Age :", font=('Calibri',15), bg=bg_color, fg='black')
         age_label.grid(row=3, column=0)
 
-        gend_label=Label(editor, text="Patient Gender :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        gend_label=Label(editor, text="Patient Gender :", font=('Calibri',15), bg=bg_color, fg='black')
         gend_label.grid(row=4, column=0)
 
-        blood_label=Label(editor, text="Patient's Blood Group :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        blood_label=Label(editor, text="Patient's Blood Group :", font=('Calibri',15), bg=bg_color, fg='black')
         blood_label.grid(row=5, column=0)
 
-        add_label=Label(editor, text="Patient Address :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        add_label=Label(editor, text="Patient Address :", font=('Calibri',15), bg=bg_color, fg='black')
         add_label.grid(row=6, column=0)
        
         #looping through the results
@@ -180,7 +230,7 @@ def update2():
             pu_address.insert(0, rec[5])
            
         #create save button
-        b9= Button(editor, text="Save Above Record", relief=GROOVE, bg=bg_color, fg='white', command=edit)
+        b9= Button(editor, text="Save Above Record", relief=GROOVE, bg=bg_color, fg='black', command=edit)
         b9.grid(row=15, column=0, columnspan=2, pady=10, padx=10, ipadx=80)
 
         con.commit()
@@ -198,17 +248,17 @@ def update1():
     update_box=Entry(edit1, width=30, relief=GROOVE)
     update_box.grid(row=10, column=1, pady=(20,0))
         
-    update_label=Label(edit1, text="Enter Patient Id to Update the Record :", font=('Comic Sans Ms',10), bg=bg_color, fg='white')
+    update_label=Label(edit1, text="Enter Patient Id to Update the Record :", font=('Calibri',10), bg=bg_color, fg='black')
     update_label.grid(row=10, column=0, padx=(27,5), pady=(25,0))
 
     #create delete query button
-    b4= Button(edit1, text="Update Record", font=('Comic Sans Ms',10), relief=GROOVE, bg=bg_color, fg='white', command=update2)
+    b4= Button(edit1, text="Update Record", font=('Calibri',10), relief=GROOVE, bg=bg_color, fg='black', command=update2)
     b4.grid(row=11, column=0, columnspan=2, pady=5, padx=10, ipadx=100)
 
    
 #delete query
 def delete2():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
     
     if delete_box.get() == '':
@@ -236,30 +286,30 @@ def delete1():
     del1.geometry("500x120")
     del1.configure(bg=bg_color)
 
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
 
     global delete_box
     delete_box=Entry(del1, width=30, relief=GROOVE)
     delete_box.grid(row=10, column=1, pady=(20,0))
         
-    delete_label=Label(del1, text="Enter Patient Id to Delete the Record :", font=('Comic Sans Ms',10), bg=bg_color, fg='white')
+    delete_label=Label(del1, text="Enter Patient Id to Delete the Record :", font=('Calibri',10), bg=bg_color, fg='black')
     delete_label.grid(row=10, column=0, padx=(27,5), pady=(25,0))
 
     #create delete query button
-    b4= Button(del1, text="Delete Record", font=('Comic Sans Ms',10), relief=GROOVE, bg=bg_color, fg='white', command=delete2)
+    b4= Button(del1, text="Delete Record", font=('Calibri',10), relief=GROOVE, bg=bg_color, fg='black', command=delete2)
     b4.grid(row=11, column=0, columnspan=2, pady=5, padx=10, ipadx=100)
 
   
 #showing all records
 def show_all():
     global show
-    show=Tk()
+    show=Toplevel()
     show.title('Patient Data')
     show.iconbitmap('D:/lab.ico')
     show.configure(bg=bg_color)
 
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
 
     cur.execute("select * from pat")
@@ -273,16 +323,16 @@ def show_all():
     for rec2 in data:  
         print_rec2 += str(rec2[1]) +  "\n"
 
-    heading_id=Label(show, text="ID", font=('Comic Sans MS',13, "bold"), bg=bg_color, fg='white')
+    heading_id=Label(show, text="ID", font=('Calibri',13, "bold"), bg=bg_color, fg='black')
     heading_id.grid(row=0, column=0, padx=(20,10), pady=(30,10))
 
-    heading_name=Label(show, text="NAME", font=('Comic Sans MS',13, "bold"), bg=bg_color, fg='white')
+    heading_name=Label(show, text="NAME", font=('Calibri',13, "bold"), bg=bg_color, fg='black')
     heading_name.grid(row=0, column=1, padx=(100,10), pady=(30,10))
 
-    data_label1=Label(show, text=print_rec1, font=('Comic Sans MS',10, "bold"), bg=bg_color, fg='white')
+    data_label1=Label(show, text=print_rec1, font=('Calibri',10, "bold"), bg=bg_color, fg='black')
     data_label1.grid(row=1, column=0)
 
-    data_label2=Label(show, text=print_rec2, font=('Comic Sans MS',10, "bold"), bg=bg_color, fg='white')
+    data_label2=Label(show, text=print_rec2, font=('Calibri',10, "bold"), bg=bg_color, fg='black')
     data_label2.grid(row=1, column=1, padx=(100,10))
 
     con.close()
@@ -291,51 +341,153 @@ def show_all():
 #closing windows of showing ne data query
 def close3():
     show2.destroy()
+
+def enter_close():
+    enter.destroy()
     
 def close2():
     show1.destroy()
     show2.destroy()
-#query for searching a record
+
+
+def entry_1():
+    if enter_box.get() == '':
+        messagebox.showerror('Error !', 'Patient Id not Provided !')
+    else:
+        con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+        cur=con.cursor()
+
+        cur.execute("select * from pat where id= " + enter_box.get())
+        data = cur.fetchall()
+
+        record1 = ''
+        for rec1 in data:
+            record1 += str(rec1[0])
+            
+        record2 = ''
+        for rec2 in data:
+            record2 += str(rec2[1])
+            
+        record3 = ''
+        for rec3 in data:
+            record3 += str(rec3[2])
+            
+        record4 = ''
+        for rec4 in data:
+            record4 += str(rec4[3])
+            
+        record5 = ''
+        for rec5 in data:
+            record5 += str(rec5[4])
+            
+        record6 = ''
+        for rec6 in data:
+            record6 += str(rec6[5])
+
+        record7 = ''
+        for rec7 in data:
+            record7 += str(rec7[6])
+
+        class Patient:
+            def __init__(self, name, age, blood_group, status, tests):
+                self.name = name
+                self.age = age
+                self.blood_group = blood_group
+                self.status = status
+                self.tests = tests
+                
+
+
+        def generate_receipt(patient):
+            receipt_content = f"Name: {patient.name}\nAge: {patient.age}\nBlood Group: {patient.blood_group}\nBill Status: {patient.status}\nDate: {date.today().strftime('%d/%m/%Y')}\n\n"
+            receipt_content += "Test Name\t\tPrice\n"
+            receipt_content += "--------------------------------\n"
+
+            total_amount = 0
+            for test_name, test_price in patient.tests.items():
+                receipt_content += f"{test_name}\t\t{test_price}\n"
+                total_amount += test_price
+
+            receipt_content += "--------------------------------\n"
+            receipt_content += "Total Amount:\t\t{total_amount}\n"
+
+            return receipt_content
+
+
+        def print_receipt(patient):
+            receipt_content = generate_receipt(patient)
+            
+            # Create an HTML file with the receipt content
+            html_content = f"<pre>{receipt_content}</pre>"
+            with open("receipt.html", "w") as file:
+                file.write(html_content)
+
+            # Open the HTML file in a web browser
+            webbrowser.open("receipt.html")
+
+
+        def show_receipt(patient):
+            receipt_content = generate_receipt(patient)
+
+            window = Toplevel()
+            window.title("Bill Receipt")
+
+            receipt_text = Text(window, height=10, width=40, font=("Courier New", 12), bd=0, bg="#F0F0F0", padx=10, pady=10)
+            receipt_text.insert(END, receipt_content)
+            receipt_text.configure(state="disabled")
+            receipt_text.pack()
+
+            total_label = Label(window, text=f"Total Amount: {sum(patient.tests.values()):.2f}", font=("Arial", 12, "bold"))
+            total_label.pack(pady=10)
+
+            print_button = Button(window, text="Print", command=lambda: print_receipt(patient), font=("Arial", 12, "bold"))
+            print_button.pack(pady=10)
+
+        # Example usage
+        patient = Patient(record2, record3, record5, record7, {"Culture Urine Test": 850.00, "Allergy Gluten": 6600.00})
+        show_receipt(patient)
+
+
 def show_one1():
     if show_box.get() == '':
         messagebox.showerror('Error !', 'Patient Id not Provided !')
         
     else:
         global show1
-        show1=Tk()
+        show1=Toplevel()
         show1.title('Patient Record')
         show1.iconbitmap('D:/lab.ico')
         show1.configure(bg=bg_color)
         
-        con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+        con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
         cur=con.cursor()
 
         cur.execute("select * from pat where id= " + show_box.get())
         data = cur.fetchall()
 
         #creating Labels
-        wel_label=Label(show1, text="RECORD OF THE PATIENT", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        wel_label=Label(show1, text="RECORD OF THE PATIENT", font=('Calibri',15), bg=bg_color, fg='black')
         wel_label.grid(row=0, column=1, padx=(0,100), pady=(35,30))
             
-        id_label=Label(show1, text="Patient Id :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        id_label=Label(show1, text="Patient Id :", font=('Calibri',15), bg=bg_color, fg='black')
         id_label.grid(row=1, column=0, padx=(50,0))
 
-        name_label=Label(show1, text="Patient Name :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        name_label=Label(show1, text="Patient Name :", font=('Calibri',15), bg=bg_color, fg='black')
         name_label.grid(row=2, column=0, padx=(50,0))
 
-        age_label=Label(show1, text="Patient Age :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        age_label=Label(show1, text="Patient Age :", font=('Calibri',15), bg=bg_color, fg='black')
         age_label.grid(row=3, column=0, padx=(50,0))
 
-        gend_label=Label(show1, text="Patient Gender :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        gend_label=Label(show1, text="Patient Gender :", font=('Calibri',15), bg=bg_color, fg='black')
         gend_label.grid(row=4, column=0, padx=(50,0))
 
-        blood_label=Label(show1, text="Patient's Blood Group :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        blood_label=Label(show1, text="Patient's Blood Group :", font=('Calibri',15), bg=bg_color, fg='black')
         blood_label.grid(row=5, column=0, padx=(50,0))
 
-        add_label=Label(show1, text="Patient Address :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        add_label=Label(show1, text="Patient Address :", font=('Calibri',15), bg=bg_color, fg='black')
         add_label.grid(row=6, column=0, padx=(50,0))
 
-        bill_label=Label(show1, text="Bill Status :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        bill_label=Label(show1, text="Bill Status :", font=('Calibri',15), bg=bg_color, fg='black')
         bill_label.grid(row=7, column=0, padx=(50,0))
         
         record1 = ''
@@ -366,29 +518,29 @@ def show_one1():
         for rec7 in data:
             record7 += str(rec7[6]) + "\n"
 
-        id_label1=Label(show1, text=record1, font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        id_label1=Label(show1, text=record1, font=('Calibri',15), bg=bg_color, fg='black')
         id_label1.grid(row=1, column=1, padx=50, pady=(20,0))
 
-        id_label2=Label(show1, text=record2, font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        id_label2=Label(show1, text=record2, font=('Calibri',15), bg=bg_color, fg='black')
         id_label2.grid(row=2, column=1, padx=50, pady=(20,0))
 
-        id_label3=Label(show1, text=record3, font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        id_label3=Label(show1, text=record3, font=('Calibri',15), bg=bg_color, fg='black')
         id_label3.grid(row=3, column=1, padx=50, pady=(20,0))
 
-        id_label4=Label(show1, text=record4, font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        id_label4=Label(show1, text=record4, font=('Calibri',15), bg=bg_color, fg='black')
         id_label4.grid(row=4, column=1, padx=50, pady=(20,0) )
 
-        id_label5=Label(show1, text=record5, font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        id_label5=Label(show1, text=record5, font=('Calibri',15), bg=bg_color, fg='black')
         id_label5.grid(row=5, column=1, padx=50, pady=(20,0) )
 
-        id_label6=Label(show1, text=record6, font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        id_label6=Label(show1, text=record6, font=('Calibri',15), bg=bg_color, fg='black')
         id_label6.grid(row=6, column=1, padx=50, pady=(20,0))
 
-        id_label7=Label(show1, text=record7, font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        id_label7=Label(show1, text=record7, font=('Calibri',15), bg=bg_color, fg='black')
         id_label7.grid(row=7, column=1, padx=50, pady=(20,0))
         
         #create close button
-        b10= Button(show1, text="Close Record", relief=GROOVE, bg=bg_color, fg='white', command=close2)
+        b10= Button(show1, text="Close Record", relief=GROOVE, bg=bg_color, fg='black', command=close2)
         b10.grid(row=8, column=0, columnspan=2, pady=10, padx=10, ipadx=80)
 
         show_box.delete(0, END)        
@@ -402,22 +554,22 @@ def show_one2():
     show2.geometry("500x140")
     show2.configure(bg=bg_color)
 
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
 
     global show_box
     show_box=Entry(show2, width=30, relief=GROOVE)
     show_box.grid(row=10, column=1, pady=(20,0))
         
-    show_label=Label(show2, text="Enter Patient Id to display that Record :", font=('Comic Sans Ms',10), bg=bg_color, fg='white')
+    show_label=Label(show2, text="Enter Patient Id to display that Record :", font=('Calibri',10), bg=bg_color, fg='black')
     show_label.grid(row=10, column=0, padx=(27,5), pady=(25,0))
 
     #create show_one query button
-    b4= Button(show2, text="Show Record", font=('Comic Sans Ms',10), relief=GROOVE, bg=bg_color, fg='white', command=show_one1)
+    b4= Button(show2, text="Show Record", font=('Calibri',10), relief=GROOVE, bg=bg_color, fg='black', command=show_one1)
     b4.grid(row=11, column=0, columnspan=2, pady=5, padx=10, ipadx=100)
 
     #create close window button
-    bu= Button(show2, text="Close Window", font=('Comic Sans Ms',10), relief=GROOVE, bg=bg_color, fg='white', command=close3)
+    bu= Button(show2, text="Close Window", font=('Calibri',10), relief=GROOVE, bg=bg_color, fg='black', command=close3)
     bu.grid(row=12, column=0, columnspan=2, pady=5, padx=10, ipadx=100)
 
     con.close()
@@ -425,7 +577,7 @@ def show_one2():
 
 #submit function for people who have not done the payment
 def submit_pn():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
 
     #getting the data from the database 
@@ -452,7 +604,7 @@ def submit_pn():
     con.close()
 #submit function for people who have done the payment
 def submit_pd():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
 
     #getting the data from the database 
@@ -495,6 +647,7 @@ def billw4_3():
     bw1.destroy()
     bw2.destroy()
     bw3.destroy()
+    
 #payment messages for credit card
 def billw4_2():
     if gpay_box.get() == '':
@@ -545,13 +698,13 @@ def billw4():
         gpay_box1=Entry(b1, width=30, relief=GROOVE)
         gpay_box1.grid(row=1, column=1, padx=(27,10), pady=(20,0))
 
-        gpay_label=Label(b1, text="Please Enter Your Debit Card Number :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label=Label(b1, text="Please Enter Your Debit Card Number :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label.grid(row=0, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label1=Label(b1, text="Please Enter Your 4-digit ATM pin :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label1=Label(b1, text="Please Enter Your 4-digit ATM pin :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label1.grid(row=1, column=0, padx=(27,10), pady=(20,0))
 
-        nb=Button(b1, text='Pay', relief=GROOVE, bg=bg_color, fg='white', command=billw4_1)
+        nb=Button(b1, text='Pay', relief=GROOVE, bg=bg_color, fg='black', command=billw4_1)
         nb.grid(row=5, column=1, columnspan=2, padx=10, pady=10, ipadx=100)
 #asking for credit card details
     if var.get()==2:
@@ -567,13 +720,13 @@ def billw4():
         gpay_box1=Entry(b2, width=30, relief=GROOVE)
         gpay_box1.grid(row=1, column=1, padx=(27,10), pady=(20,0))
 
-        gpay_label=Label(b2, text="Please Enter Your Credit Card Number :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label=Label(b2, text="Please Enter Your Credit Card Number :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label.grid(row=0, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label1=Label(b2, text="Please Enter Your Credit Card Pin :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label1=Label(b2, text="Please Enter Your Credit Card Pin :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label1.grid(row=1, column=0, padx=(27,10), pady=(20,0))
 
-        nb=Button(b2, text='Pay', relief=GROOVE, bg=bg_color, fg='white', command=billw4_2)
+        nb=Button(b2, text='Pay', relief=GROOVE, bg=bg_color, fg='black', command=billw4_2)
         nb.grid(row=5, column=1, columnspan=2, padx=10, pady=10, ipadx=100)
 #asking for google pay details
     if var.get()==3:
@@ -589,13 +742,13 @@ def billw4():
         gpay_box1=Entry(b3, width=30, relief=GROOVE)
         gpay_box1.grid(row=1, column=1, padx=(27,10), pady=(20,0))
 
-        gpay_label=Label(b3, text="Please Enter Your Mobile Number :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label=Label(b3, text="Please Enter Your Mobile Number :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label.grid(row=0, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label1=Label(b3, text="Please Enter Your 4-digit UPI pin :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label1=Label(b3, text="Please Enter Your 4-digit UPI pin :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label1.grid(row=1, column=0, padx=(27,10), pady=(20,0))
 
-        nb=Button(b3, text='Pay', relief=GROOVE, bg=bg_color, fg='white', command=billw4_3)
+        nb=Button(b3, text='Pay', relief=GROOVE, bg=bg_color, fg='black', command=billw4_3)
         nb.grid(row=5, column=1, columnspan=2, padx=10, pady=10, ipadx=100)
 #payment message for cash payment
     if var.get()==4:
@@ -609,7 +762,7 @@ You Can Now Pay your Bill on our reception via Cash
 
 #window for selecting mode of payment  
 def billw3():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
     
     cur.execute("Update pat set bill =" + "'Payment Done'" + " where id =" + bill_box.get())
@@ -622,22 +775,22 @@ def billw3():
     
     global var
     var=IntVar()
-    Rb=Radiobutton(bw3, text='Debit Card', variable=var, value=1, font=('Comic Sans MS',12, "bold"), bg=bg_color, fg='black')
+    Rb=Radiobutton(bw3, text='Debit Card', variable=var, value=1, font=('Calibri',12, "bold"), bg=bg_color, fg='black')
     Rb.grid(row=1, column=0, padx=(10,0), pady=10)
 
-    Rb=Radiobutton(bw3, text='Credit Card', variable=var, value=2, font=('Comic Sans MS',12, "bold"), bg=bg_color, fg='black')
+    Rb=Radiobutton(bw3, text='Credit Card', variable=var, value=2, font=('Calibri',12, "bold"), bg=bg_color, fg='black')
     Rb.grid(row=2, column=0, padx=(10,0), pady=10)
 
-    Rb=Radiobutton(bw3, text='Google Pay', variable=var, value=3, font=('Comic Sans MS',12, "bold"), bg=bg_color, fg='black')
+    Rb=Radiobutton(bw3, text='Google Pay', variable=var, value=3, font=('Calibri',12, "bold"), bg=bg_color, fg='black')
     Rb.grid(row=1, column=2, pady=10)
 
-    Rb=Radiobutton(bw3, text='Cash', variable=var, value=4, font=('Comic Sans MS',12, "bold"), bg=bg_color, fg='black')
+    Rb=Radiobutton(bw3, text='Cash', variable=var, value=4, font=('Calibri',12, "bold"), bg=bg_color, fg='black')
     Rb.grid(row=2, column=2, pady=10)
 
-    mode=Label(bw3, text="Please Select the mode of Payment", font=('Comic Sans MS',15, "bold"), bg=bg_color, fg='white')
+    mode=Label(bw3, text="Please Select the mode of Payment", font=('Calibri',15, "bold"), bg=bg_color, fg='black')
     mode.grid(row=0, column=1, padx=10, pady=10)
 
-    nextb=Button(bw3, text='Next', relief=GROOVE, bg=bg_color, fg='white', command=billw4)
+    nextb=Button(bw3, text='Next', relief=GROOVE, bg=bg_color, fg='black', command=billw4)
     nextb.grid(row=5, column=1, padx=10, pady=10, ipadx=100)
 
     con.commit()
@@ -648,7 +801,7 @@ def billw2():
         messagebox.showerror('Error !', 'Patient Id Not Provided !')
         bw1.destroy()
     else:
-        con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+        con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
         cur=con.cursor()
 
         cur.execute("select * from pat where id =" + bill_box.get())
@@ -670,13 +823,13 @@ def billw2():
             bw2.geometry("500x120")
             bw2.configure(bg=bg_color)
 
-            l=Label(bw2, text ='Amount to be Paid:', font=('Comic Sans Ms',14), bg=bg_color, fg='white')
+            l=Label(bw2, text ='Amount to be Paid:', font=('Calibri',14), bg=bg_color, fg='black')
             l.grid(row=35, column=0, padx=(27,5), pady=(25,0))
 
-            l=Label(bw2, text = record7, font=('Comic Sans Ms',14) ,bg=bg_color, fg='white')
+            l=Label(bw2, text = record7, font=('Calibri',14) ,bg=bg_color, fg='black')
             l.grid(row=35, column=1, pady=(20,0))
 
-            b= Button(bw2, text="Pay", font=('Comic Sans Ms',10), relief=GROOVE,  bg=bg_color, fg='white', command=billw3)
+            b= Button(bw2, text="Pay", font=('Calibri',10), relief=GROOVE,  bg=bg_color, fg='black', command=billw3)
             b.grid(row=40, column=1, pady=2, padx=20, ipadx=100)
 #making window to input the id for which user want to pay the bill
 def billw1():
@@ -686,17 +839,17 @@ def billw1():
     bw1.iconbitmap('D:/lab.ico')
     bw1.geometry("500x120")
     bw1.configure(bg=bg_color)
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
 
     global bill_box
     bill_box=Entry(bw1, width=30, relief=GROOVE)
     bill_box.grid(row=10, column=1, pady=(20,0))
         
-    bill_label=Label(bw1, text="Enter Patient Id to Pay Bill :", font=('Comic Sans Ms',10), bg=bg_color, fg='white')
+    bill_label=Label(bw1, text="Enter Patient Id to Pay Bill :", font=('Calibri',10), bg=bg_color, fg='black')
     bill_label.grid(row=10, column=0, padx=(27,5), pady=(25,0))
 
-    b4= Button(bw1, text="Open Bill Summary", font=('Comic Sans Ms',10), relief=GROOVE, bg=bg_color, fg='white', command=billw2)
+    b4= Button(bw1, text="Open Bill Summary", font=('Calibri',10), relief=GROOVE, bg=bg_color, fg='black', command=billw2)
     b4.grid(row=11, column=0, columnspan=2, pady=5, padx=10, ipadx=100)
 
 
@@ -727,19 +880,19 @@ def pay():
         gpay_box1=Entry(debit1, width=30, relief=GROOVE)
         gpay_box1.grid(row=1, column=1, padx=(27,10), pady=(20,0))
 
-        gpay_label=Label(debit1, text="Please Enter Your Debit Card Number :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label=Label(debit1, text="Please Enter Your Debit Card Number :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label.grid(row=0, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label1=Label(debit1, text="Please Enter Your 4-digit ATM pin :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label1=Label(debit1, text="Please Enter Your 4-digit ATM pin :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label1.grid(row=1, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label2=Label(debit1, text="Amount to be Paid :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label2=Label(debit1, text="Amount to be Paid :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label2.grid(row=2, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label3=Label(debit1, text=str(sum(bill_list)) + '/-', font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label3=Label(debit1, text=str(sum(bill_list)) + '/-', font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label3.grid(row=2, column=1, padx=(27,10), pady=(20,0))
 
-        nb=Button(debit1, text='Pay', relief=GROOVE, bg=bg_color, fg='white', command=pin1)
+        nb=Button(debit1, text='Pay', relief=GROOVE, bg=bg_color, fg='black', command=pin1)
         nb.grid(row=5, column=1, columnspan=2, padx=10, pady=10, ipadx=100)
 #asking details for credit card
     if var.get()==2:
@@ -755,19 +908,19 @@ def pay():
         gpay_box1=Entry(debit2, width=30, relief=GROOVE)
         gpay_box1.grid(row=1, column=1, padx=(27,10), pady=(20,0))
 
-        gpay_label=Label(debit2, text="Please Enter Your Credit Card Number :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label=Label(debit2, text="Please Enter Your Credit Card Number :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label.grid(row=0, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label1=Label(debit2, text="Please Enter Your Credit Card Pin :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label1=Label(debit2, text="Please Enter Your Credit Card Pin :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label1.grid(row=1, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label2=Label(debit2, text="Amount to be Paid :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label2=Label(debit2, text="Amount to be Paid :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label2.grid(row=2, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label3=Label(debit2, text=str(sum(bill_list)) + '/-', font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label3=Label(debit2, text=str(sum(bill_list)) + '/-', font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label3.grid(row=2, column=1, padx=(27,10), pady=(20,0))
 
-        nb=Button(debit2, text='Pay', relief=GROOVE, bg=bg_color, fg='white', command=pin2)
+        nb=Button(debit2, text='Pay', relief=GROOVE, bg=bg_color, fg='black', command=pin2)
         nb.grid(row=5, column=1, columnspan=2, padx=10, pady=10, ipadx=100)
 #asking details for google pay
     if var.get()==3:
@@ -783,19 +936,19 @@ def pay():
         gpay_box1=Entry(debit3, width=30, relief=GROOVE)
         gpay_box1.grid(row=1, column=1, padx=(27,10), pady=(20,0))
 
-        gpay_label=Label(debit3, text="Please Enter Your Mobile Number :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label=Label(debit3, text="Please Enter Your Mobile Number :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label.grid(row=0, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label1=Label(debit3, text="Please Enter Your 4-digit UPI pin :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label1=Label(debit3, text="Please Enter Your 4-digit UPI pin :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label1.grid(row=1, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label2=Label(debit3, text="Amount to be Paid :", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label2=Label(debit3, text="Amount to be Paid :", font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label2.grid(row=2, column=0, padx=(27,10), pady=(20,0))
 
-        gpay_label3=Label(debit3, text=str(sum(bill_list)) + '/-', font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        gpay_label3=Label(debit3, text=str(sum(bill_list)) + '/-', font=('Calibri',12), bg=bg_color, fg='black')
         gpay_label3.grid(row=2, column=1, padx=(27,10), pady=(20,0))
 
-        nb=Button(debit3, text='Pay', relief=GROOVE, bg=bg_color, fg='white', command=pin3)
+        nb=Button(debit3, text='Pay', relief=GROOVE, bg=bg_color, fg='black', command=pin3)
         nb.grid(row=5, column=1, columnspan=2, padx=10, pady=10, ipadx=100)
 #payment message for cash payment
     if var.get()==4:
@@ -864,34 +1017,34 @@ def total():
     
     global var
     var=IntVar()
-    Rb=Radiobutton(payment, text='Debit Card', variable=var, value=1, font=('Comic Sans MS',12, "bold"), bg=bg_color, fg='black')
+    Rb=Radiobutton(payment, text='Debit Card', variable=var, value=1, font=('Calibri',12, "bold"), bg=bg_color, fg='black')
     Rb.grid(row=1, column=0, padx=(10,0), pady=10)
 
-    Rb=Radiobutton(payment, text='Credit Card', variable=var, value=2, font=('Comic Sans MS',12, "bold"), bg=bg_color, fg='black')
+    Rb=Radiobutton(payment, text='Credit Card', variable=var, value=2, font=('Calibri',12, "bold"), bg=bg_color, fg='black')
     Rb.grid(row=2, column=0, padx=(10,0), pady=10)
 
-    Rb=Radiobutton(payment, text='Google Pay', variable=var, value=3, font=('Comic Sans MS',12, "bold"), bg=bg_color, fg='black')
+    Rb=Radiobutton(payment, text='Google Pay', variable=var, value=3, font=('Calibri',12, "bold"), bg=bg_color, fg='black')
     Rb.grid(row=1, column=2, pady=10)
 
-    Rb=Radiobutton(payment, text='Cash', variable=var, value=4, font=('Comic Sans MS',12, "bold"), bg=bg_color, fg='black')
+    Rb=Radiobutton(payment, text='Cash', variable=var, value=4, font=('Calibri',12, "bold"), bg=bg_color, fg='black')
     Rb.grid(row=2, column=2, pady=10)
 
-    mode=Label(payment, text="Please Select the mode of Payment", font=('Comic Sans MS',15, "bold"), bg=bg_color, fg='white')
+    mode=Label(payment, text="Please Select the mode of Payment", font=('Calibri',15, "bold"), bg=bg_color, fg='black')
     mode.grid(row=0, column=1, padx=10, pady=10)
 
-    nextb=Button(payment, text='Next', relief=GROOVE, bg=bg_color, fg='white', command=pay)
+    nextb=Button(payment, text='Next', relief=GROOVE, bg=bg_color, fg='black', command=pay)
     nextb.grid(row=5, column=1, padx=10, pady=10, ipadx=100)
 
     submit_pd()
 #showing bill summary   
 def bills():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
 
     global bill_list
     global bill
     bill_list=[]
-    bill=Tk()
+    bill=Toplevel()
     bill.title("Patient's Bill")
     bill.iconbitmap('D:/lab.ico')
     bill.configure(bg=bg_color)
@@ -958,297 +1111,297 @@ def bills():
     C29var=var29.get()
     C30var=var30.get()
 
-    l0=Label(bill, text ="PATIENTS' BILL SUMMARY", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+    l0=Label(bill, text ="PATIENTS' BILL SUMMARY", font=('Calibri',15), bg=bg_color, fg='black')
     l0.grid(row=0, column=1, padx=10, pady=10)
 
-    heading_id=Label(bill, text="TEST NAME", font=('Comic Sans MS',13), bg=bg_color, fg='white')
+    heading_id=Label(bill, text="TEST NAME", font=('Calibri',13), bg=bg_color, fg='black')
     heading_id.grid(row=1, column=0)
 
-    heading_name=Label(bill, text="TEST PRICE (INR)", font=('Comic Sans MS',13), bg=bg_color, fg='white')
+    heading_name=Label(bill, text="TEST PRICE (INR)", font=('Calibri',13), bg=bg_color, fg='black')
     heading_name.grid(row=1, column=2)
 
     if C1var == 1:
-        l=Label(bill, text =c1.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c1.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=3, column=0)
 
-        l=Label(bill, text =a1, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a1, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=3, column=2)
 
         bill_list.append(int(a1))
 
     if C2var == 1:
-        l=Label(bill, text =c2.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c2.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=4, column=0)
 
-        l=Label(bill, text =a2, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a2, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=4, column=2)
 
         bill_list.append(int(a2))
 
     if C3var == 1:
-        l=Label(bill, text =c3.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c3.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=5, column=0)
 
-        l=Label(bill, text =a3, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a3, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=5, column=2)
 
         bill_list.append(int(a3))
 
     if C4var == 1:
-        l=Label(bill, text =c4.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c4.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=6, column=0)
 
-        l=Label(bill, text =a4, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a4, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=6, column=2)
 
         bill_list.append(int(a4))
 
     if C5var == 1:
-        l=Label(bill, text =c5.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c5.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=7, column=0)
 
-        l=Label(bill, text =a5, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a5, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=7, column=2)
 
         bill_list.append(int(a5))
 
     if C6var == 1:
-        l=Label(bill, text =c6.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c6.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=8, column=0)
 
-        l=Label(bill, text =a6, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a6, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=8, column=2)
 
         bill_list.append(int(a6))
 
     if C7var == 1:
-        l=Label(bill, text =c7.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c7.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=9, column=0)
 
-        l=Label(bill, text =a7, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a7, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=9, column=2)
 
         bill_list.append(int(a7))
 
     if C8var == 1:
-        l=Label(bill, text =c8.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c8.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=10, column=0)
 
-        l=Label(bill, text =a8, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a8, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=10, column=2)
 
         bill_list.append(int(a8))
 
     if C9var == 1:
-        l=Label(bill, text =c9.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c9.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=11, column=0)
 
-        l=Label(bill, text =a9, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a9, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=11, column=2)
 
         bill_list.append(int(a9))
 
     if C10var == 1:
-        l=Label(bill, text =c10.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c10.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=12, column=0)
 
-        l=Label(bill, text =a10, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a10, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=12, column=2)
         
         bill_list.append(int(a10))
 
     if C11var == 1:
-        l=Label(bill, text =c11.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c11.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=13, column=0)
 
-        l=Label(bill, text =a11, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a11, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=13, column=2)
 
         bill_list.append(int(a11))
 
     if C12var == 1:
-        l=Label(bill, text =c12.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c12.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=14, column=0)
 
-        l=Label(bill, text =a12, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
-        l.grid(row=14, column=2)
+        l=Label(bill, text =a12, font=('Calibri',11), bg=bg_color, fg='black')
+        l.grid(row=14, column =2)
 
         bill_list.append(int(a12))
 
     if C13var == 1:
-        l=Label(bill, text =c13.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c13.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=15, column=0)
 
-        l=Label(bill, text =a13, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a13, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=15, column=2)
 
         bill_list.append(int(a13))
 
     if C14var == 1:
-        l=Label(bill, text =c14.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c14.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=16, column=0)
 
-        l=Label(bill, text =a14, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a14, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=16, column=2)
 
         bill_list.append(int(a14))
 
     if C15var == 1:
-        l=Label(bill, text =c15.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c15.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=17, column=0)
 
-        l=Label(bill, text =a15, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =a15, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=17, column=2)
 
         bill_list.append(int(a15))
 
     if C16var == 1:
-        l=Label(bill, text =c16.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c16.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=18, column=0)
 
-        l=Label(bill, text =b1, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b1, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=18, column=2)
 
         bill_list.append(int(b1))
 
     if C17var == 1:
-        l=Label(bill, text =c17.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c17.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=19, column=0)
 
-        l=Label(bill, text =b2, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b2, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=19, column=2)
 
         bill_list.append(int(b2))
 
 
     if C18var == 1:
-        l=Label(bill, text =c18.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c18.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=20, column=0)
 
-        l=Label(bill, text =b3, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b3, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=20, column=2)
 
         bill_list.append(int(b3))
 
     if C19var == 1:
-        l=Label(bill, text =c19.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c19.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=21, column=0)
 
-        l=Label(bill, text =b4, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b4, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=21, column=2)
 
         bill_list.append(int(b4))
 
     if C20var == 1:
-        l=Label(bill, text =c20.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c20.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=22, column=0)
 
-        l=Label(bill, text =b5, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b5, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=22, column=2)
 
         bill_list.append(int(b5))
 
     if C21var == 1:
-        l=Label(bill, text =c21.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c21.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=23, column=0)
 
-        l=Label(bill, text =b6, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b6, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=23, column=2)
 
         bill_list.append(int(b6))
 
     if C22var == 1:
-        l=Label(bill, text =c22.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c22.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=24, column=0)
 
-        l=Label(bill, text =b7, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b7, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=24, column=2)
 
         bill_list.append(int(b7))
 
     if C23var == 1:
-        l=Label(bill, text =c23.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c23.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=25, column=0)
 
-        l=Label(bill, text =b8, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b8, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=25, column=2)
 
         bill_list.append(int(b8))
 
     if C24var == 1:
-        l=Label(bill, text =c24.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c24.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=26, column=0)
 
-        l=Label(bill, text =b9, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b9, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=26, column=2)
 
         bill_list.append(int(b9))
 
     if C25var == 1:
-        l=Label(bill, text =c25.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c25.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=27, column=0)
 
-        l=Label(bill, text =b10, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b10, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=27, column=2)
 
         bill_list.append(int(b10))
 
     if C26var == 1:
-        l=Label(bill, text =c26.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c26.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=28, column=0)
 
-        l=Label(bill, text =wb11, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =wb11, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=28, column=2)
 
         bill_list.append(int(wb11))
 
     if C27var == 1:
-        l=Label(bill, text =c27.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c27.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=29, column=0)
 
-        l=Label(bill, text =b12, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b12, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=29, column=2)
 
         bill_list.append(int(b12))
 
     if C28var == 1:
-        l=Label(bill, text =c28.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c28.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=30, column=0)
 
-        l=Label(bill, text =b13, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b13, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=30, column=2)
 
         bill_list.append(int(b13))
 
     if C29var == 1:
-        l=Label(bill, text =c29.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c29.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=31, column=0)
 
-        l=Label(bill, text =b14, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b14, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=31, column=2)
 
         bill_list.append(int(b14))
 
     if C30var == 1:
-        l=Label(bill, text =c30.cget('text'), font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =c30.cget('text'), font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=32, column=0)
 
-        l=Label(bill, text =b15, font=('Comic Sans Ms',11), bg=bg_color, fg='white')
+        l=Label(bill, text =b15, font=('Calibri',11), bg=bg_color, fg='black')
         l.grid(row=32, column=2)
 
         bill_list.append(int(b15))
 
     #label for Total Amount
-    l=Label(bill, text ='Total Amount :', font=('Comic Sans Ms',14), bg=bg_color, fg='white')
+    l=Label(bill, text ='Total Amount :', font=('Calibri',14), bg=bg_color, fg='black')
     l.grid(row=35, column=0)
 
-    l=Label(bill, text =str(sum(bill_list)) + '/-', font=('Comic Sans Ms',14) ,bg=bg_color, fg='white')
+    l=Label(bill, text =str(sum(bill_list)) + '/-', font=('Calibri',14) ,bg=bg_color, fg='black')
     l.grid(row=35, column=2)
 
-    b= Button(bill, text="Pay Now", font=('Comic Sans Ms',10), relief=GROOVE,  bg=bg_color, fg='white', command=total)
+    b= Button(bill, text="Pay Now", font=('Calibri',10), relief=GROOVE,  bg=bg_color, fg='black', command=total)
     b.grid(row=40, column=1, pady=2, padx=20, ipadx=100)
 
-    b= Button(bill, text="Pay Later", font=('Comic Sans Ms',10), relief=GROOVE,  bg=bg_color, fg='white', command=leave)
+    b= Button(bill, text="Pay Later", font=('Calibri',10), relief=GROOVE,  bg=bg_color, fg='black', command=leave)
     b.grid(row=42, column=1, pady=2, padx=20, ipadx=97.5)
 #test function to show test list
 def tests():
@@ -1438,207 +1591,206 @@ def tests():
         
         #list of tests in lab
         #creating check buttons 
-        c1=Checkbutton(test, text="Oncorpo Heredity Cancer Risk ", variable = var1, onvalue=1, offvalue=0,  font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c1=Checkbutton(test, text="Oncorpo Heredity Cancer Risk ", variable = var1, onvalue=1, offvalue=0,  font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c1.grid(row=1, column=0, sticky=W , pady=(10,0))
 
-        c2=Checkbutton(test, text="Allergy Comprehensive Profile", variable=var2, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c2=Checkbutton(test, text="Allergy Comprehensive Profile", variable=var2, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c2.grid(row=2, column=0, sticky=W , pady=(10,0))
 
-        c3=Checkbutton(test, text="Allergy Regional Panel", variable=var3, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c3=Checkbutton(test, text="Allergy Regional Panel", variable=var3, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c3.grid(row=3, column=0, sticky=W, pady=(10,0))
 
-        c4=Checkbutton(test, text="Obesity Panel", variable=var4, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c4=Checkbutton(test, text="Obesity Panel", variable=var4, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c4.grid(row=4, column=0, sticky=W, pady=(10,0))
                         
-        c5=Checkbutton(test, text="Enhance Liver Fibrosis", variable=var5, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c5=Checkbutton(test, text="Enhance Liver Fibrosis", variable=var5, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c5.grid(row=5, column=0, sticky=W, pady=(10,0))
                         
-        c6=Checkbutton(test, text="Sugar Comprehensive", variable=var6, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c6=Checkbutton(test, text="Sugar Comprehensive", variable=var6, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c6.grid(row=6, column=0, sticky=W, pady=(10,0))
                         
-        c7=Checkbutton(test, text="Chronic Fatigue Syndrome", variable=var7, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c7=Checkbutton(test, text="Chronic Fatigue Syndrome", variable=var7, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c7.grid(row=7, column=0, sticky=W, pady=(10,0))
                         
-        c8=Checkbutton(test, text="X-Rays", variable=var8, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c8=Checkbutton(test, text="X-Rays", variable=var8, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c8.grid(row=8, column=0, sticky=W, pady=(10,0))
                         
-        c9=Checkbutton(test, text="Ultrasounds", variable=var9, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c9=Checkbutton(test, text="Ultrasounds", variable=var9, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c9.grid(row=9, column=0, sticky=W, pady=(10,0))
                         
-        c10=Checkbutton(test, text="MRIs", variable=var10, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c10=Checkbutton(test, text="MRIs", variable=var10, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c10.grid(row=10, column=0, sticky=W, pady=(10,0))
                         
-        c11=Checkbutton(test, text="HIV 1 and 2 Antibodies", variable=var11, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c11=Checkbutton(test, text="HIV 1 and 2 Antibodies", variable=var11, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c11.grid(row=11, column=0, sticky=W, pady=(10,0))
                         
-        c12=Checkbutton(test, text="Immunity check  package", variable=var12, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c12=Checkbutton(test, text="Immunity check  package", variable=var12, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c12.grid(row=12, column=0, sticky=W, pady=(10,0))
                         
-        c13=Checkbutton(test, text="Thyroid Comprehensive Panel", variable=var13, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c13=Checkbutton(test, text="Thyroid Comprehensive Panel", variable=var13, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c13.grid(row=13, column=0, sticky=W, pady=(10,0))
                         
-        c14=Checkbutton(test, text="Sugar Advance", variable=var14, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c14=Checkbutton(test, text="Sugar Advance", variable=var14, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c14.grid(row=14, column=0, sticky=W, pady=(10,0))
 
-        c15=Checkbutton(test, text="Culture Stool Test", variable=var15, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c15=Checkbutton(test, text="Culture Stool Test", variable=var15, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c15.grid(row=15, column=0, sticky=W, pady=(10,0))
                 
         #next column
-        c16=Checkbutton(test, text="Culture Urine Test", variable=var16, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c16=Checkbutton(test, text="Culture Urine Test", variable=var16, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c16.grid(row=1, column=4, sticky=W, pady=(10,0))
 
-        c17=Checkbutton(test, text="Insulin Antibodies", variable=var17, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c17=Checkbutton(test, text="Insulin Antibodies", variable=var17, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c17.grid(row=2, column=4, sticky=W, pady=(10,0))
                         
-        c18=Checkbutton(test, text="Dengue Fever Antibodies", variable=var18, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c18=Checkbutton(test, text="Dengue Fever Antibodies", variable=var18, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c18.grid(row=3, column=4, sticky=W, pady=(10,0))
                         
-        c19=Checkbutton(test, text="Zinc Serum / Plasma", variable=var19, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c19=Checkbutton(test, text="Zinc Serum / Plasma", variable=var19, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c19.grid(row=4, column=4, sticky=W, pady=(10,0))
                         
-        c20=Checkbutton(test, text="Allergy Gluten", variable=var20, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c20=Checkbutton(test, text="Allergy Gluten", variable=var20, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c20.grid(row=5, column=4, sticky=W, pady=(10,0))
                         
-        c21=Checkbutton(test, text="Pregnancy Tests", variable=var21, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c21=Checkbutton(test, text="Pregnancy Tests", variable=var21, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c21.grid(row=6, column=4, sticky=W, pady=(10,0))
                         
-        c22=Checkbutton(test, text="Insulin Fasting", variable=var22, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c22=Checkbutton(test, text="Insulin Fasting", variable=var22, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c22.grid(row=7, column=4, sticky=W, pady=(10,0))
                         
-        c23=Checkbutton(test, text="Heamoglobin", variable=var23, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c23=Checkbutton(test, text="Heamoglobin", variable=var23, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c23.grid(row=8, column=4, sticky=W, pady=(10,0))
                         
-        c24=Checkbutton(test, text="Anaemia Check Complete", variable=var24, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c24=Checkbutton(test, text="Anaemia Check Complete", variable=var24, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c24.grid(row=9, column=4, sticky=W, pady=(10,0))
                         
-        c25=Checkbutton(test, text="Red Blood Cells (RBC)", variable=var25, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c25=Checkbutton(test, text="Red Blood Cells (RBC)", variable=var25, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c25.grid(row=10, column=4, sticky=W, pady=(10,0))
                         
-        c26=Checkbutton(test, text="White Blood Cells (WBC)", variable=var26, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c26=Checkbutton(test, text="black Blood Cells (WBC)", variable=var26, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c26.grid(row=11, column=4, sticky=W, pady=(10,0))
                         
-        c27=Checkbutton(test, text="Hypertension Panel", variable=var27, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c27=Checkbutton(test, text="Hypertension Panel", variable=var27, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c27.grid(row=12, column=4, sticky=W, pady=(10,0))
                         
-        c28=Checkbutton(test, text="Allergy Milk", variable=var28, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c28=Checkbutton(test, text="Allergy Milk", variable=var28, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c28.grid(row=13, column=4, sticky=W, pady=(10,0))
                         
-        c29=Checkbutton(test, text="Allergy Mushroom", variable=var29, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c29=Checkbutton(test, text="Allergy Mushroom", variable=var29, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c29.grid(row=14, column=4, sticky=W, pady=(10,0))
                         
-        c30=Checkbutton(test, text="Iron Check", variable=var30, onvalue=1, offvalue=0,font=('Comic Sans Ms',12, "bold"), bg=bg_color, fg='black')
+        c30=Checkbutton(test, text="Iron Check", variable=var30, onvalue=1, offvalue=0,font=('Calibri',12, "bold"), bg=bg_color, fg='black')
         c30.grid(row=15, column=4, sticky=W, pady=(10,0))
 
         #making Price Labels
-        l0=Label(test, text ="PATIENTS' TESTS LIST", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+        l0=Label(test, text ="PATIENTS' TESTS LIST", font=('Calibri',15), bg=bg_color, fg='black')
         l0.grid(row=0, column=3, pady=(10,0))
      
-        l1=Label(test, text ="25000/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l1=Label(test, text ="25000/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l1.grid(row=1, column=2, sticky=W, pady=(10,0), ipadx=(50))
-
-        l2=Label(test, text ="13000/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l2=Label(test, text ="13000/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l2.grid(row=2, column=2, sticky=W, pady=(10,0), ipadx=(50))
 
-        l3=Label(test, text ="10000/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l3=Label(test, text ="10000/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l3.grid(row=3, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l4=Label(test, text ="4900/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l4=Label(test, text ="4900/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l4.grid(row=4, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l5=Label(test, text ="4500/-", font=('Comic Sans Ms',12), bg=bg_color, fg='white')
+        l5=Label(test, text ="4500/-", font=('Calibri',12), bg=bg_color, fg='black')
         l5.grid(row=5, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l6=Label(test, text ="3099/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l6=Label(test, text ="3099/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l6.grid(row=6, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l7=Label(test, text ="3500/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l7=Label(test, text ="3500/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l7.grid(row=7, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l8=Label(test, text ="800/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l8=Label(test, text ="800/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l8.grid(row=8, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l9=Label(test, text ="1200/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l9=Label(test, text ="1200/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l9.grid(row=9, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l10=Label(test, text ="4500/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l10=Label(test, text ="4500/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l10.grid(row=10, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l11=Label(test, text ="3350/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l11=Label(test, text ="3350/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l11.grid(row=11, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l12=Label(test, text ="4000/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l12=Label(test, text ="4000/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l12.grid(row=12, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l13=Label(test, text ="3500/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l13=Label(test, text ="3500/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l13.grid(row=13, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l14=Label(test, text ="1300/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l14=Label(test, text ="1300/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l14.grid(row=14, column=2, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l15=Label(test, text ="1000/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l15=Label(test, text ="1000/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l15.grid(row=15, column=2, sticky=W, pady=(10,0), ipadx=(50))
 
         #next column
-        l16=Label(test, text ="850/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l16=Label(test, text ="850/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l16.grid(row=1, column=5, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l17=Label(test, text ="2200/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l17=Label(test, text ="2200/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l17.grid(row=2, column=5, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l18=Label(test, text ="900/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l18=Label(test, text ="900/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l18.grid(row=3, column=5, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l19=Label(test, text ="3500/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l19=Label(test, text ="3500/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l19.grid(row=4, column=5, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l20=Label(test, text ="6600/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l20=Label(test, text ="6600/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l20.grid(row=5, column=5, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l21=Label(test, text ="1000/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l21=Label(test, text ="1000/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l21.grid(row=6, column=5, sticky=W, pady=(10,0), ipadx=(50))
                 
-        l22=Label(test, text ="2500/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l22=Label(test, text ="2500/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l22.grid(row=7, column=5, sticky=W, pady=(10,0), ipadx=(50))
 
-        l23=Label(test, text ="600/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l23=Label(test, text ="600/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l23.grid(row=8, column=5, sticky=W, pady=(10,0), ipadx=(50))
 
-        l24=Label(test, text ="2500/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l24=Label(test, text ="2500/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l24.grid(row=9, column=5, sticky=W, pady=(10,0), ipadx=(50))
 
-        l25=Label(test, text ="800/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l25=Label(test, text ="800/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l25.grid(row=10, column=5, sticky=W, pady=(10,0), ipadx=(50))
 
-        l26=Label(test, text ="900/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l26=Label(test, text ="900/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l26.grid(row=11, column=5, sticky=W, pady=(10,0), ipadx=(50))
 
-        l27=Label(test, text ="5000/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l27=Label(test, text ="5000/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l27.grid(row=12, column=5, sticky=W, pady=(10,0), ipadx=(50))
 
-        l28=Label(test, text ="1450/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l28=Label(test, text ="1450/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l28.grid(row=13, column=5, sticky=W, pady=(10,0), ipadx=(50))
 
-        l29=Label(test, text ="5500/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l29=Label(test, text ="5500/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l29.grid(row=14, column=5, sticky=W, pady=(10,0), ipadx=(50))
 
-        l30=Label(test, text ="2200/-", font=('Comic Sans Ms',12),  bg=bg_color, fg='white')
+        l30=Label(test, text ="2200/-", font=('Calibri',12),  bg=bg_color, fg='black')
         l30.grid(row=15, column=5, sticky=W, pady=(10,0), ipadx=(50))
 
         #making next Button
-        b11= Button(test, text=" NEXT ", font=('Comic Sans Ms',10), relief=GROOVE, bg=bg_color, fg='white', command=bills)
+        b11= Button(test, text=" NEXT ", font=('Calibri',10), relief=GROOVE, bg=bg_color, fg='black', command=bills)
         b11.grid(row=6, column=6, pady=2, padx=20, ipadx=100)
 
         
 #add the patient data
 def add_data():          
     global add
-    add=Tk()
+    add=Toplevel()
     add.title('Adding Patient Record')
     add.iconbitmap('D:/lab.ico')
     add.geometry("550x350")
     add.configure(bg=bg_color)
 
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
     cur=con.cursor()
     global pa_id
     global pa_name
@@ -1667,69 +1819,101 @@ def add_data():
     pa_address.grid(row=6, column=1)
     
     #creating Labels    
-    id_label=Label(add, text=" Enter Patient Id :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+    id_label=Label(add, text=" Enter Patient Id :", font=('Calibri',15), bg=bg_color, fg='black')
     id_label.grid(row=1, column=0, pady=(10,0))
 
-    name_label=Label(add, text="Enter Patient Name :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+    name_label=Label(add, text="Enter Patient Name :", font=('Calibri',15), bg=bg_color, fg='black')
     name_label.grid(row=2, column=0)
 
-    age_label=Label(add, text="Enter Patient Age :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+    age_label=Label(add, text="Enter Patient Age :", font=('Calibri',15), bg=bg_color, fg='black')
     age_label.grid(row=3, column=0)
 
-    gend_label=Label(add, text="Enter Patient Gender :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+    gend_label=Label(add, text="Enter Patient Gender :", font=('Calibri',15), bg=bg_color, fg='black')
     gend_label.grid(row=4, column=0)
 
-    blood_label=Label(add, text="Enter Patient's Blood Group :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+    blood_label=Label(add, text="Enter Patient's Blood Group :", font=('Calibri',15), bg=bg_color, fg='black')
     blood_label.grid(row=5, column=0)
 
-    add_label=Label(add, text="Enter Patient Address :", font=('Comic Sans Ms',15), bg=bg_color, fg='white')
+    add_label=Label(add, text="Enter Patient Address :", font=('Calibri',15), bg=bg_color, fg='black')
     add_label.grid(row=6, column=0)
     
     #create next Button
-    b2= Button(add, text=" NEXT ", font=('Comic Sans Ms',10), relief=GROOVE, bg=bg_color, fg='white', command=tests)
+    b2= Button(add, text=" NEXT ", font=('Calibri',10), relief=GROOVE, bg=bg_color, fg='black', command=tests)
     b2.grid(row=12, column=0, columnspan=2, pady=5, padx=10, ipadx=103)
 
     con.commit()
     con.close()
-            
+
+def enter_id():
+    global enter
+    enter=Toplevel()
+    enter.title('Enter ID')
+    enter.iconbitmap('D:/lab.ico')
+    enter.geometry("500x140")
+    enter.configure(bg=bg_color)
+
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    cur=con.cursor()
+
+    global enter_box
+    enter_box=Entry(enter, width=30, relief=GROOVE)
+    enter_box.grid(row=10, column=1, pady=(20,0))
+        
+    enter_label=Label(enter, text="Enter Patient Id to display that Record :", font=('Calibri',10), bg=bg_color, fg='black')
+    enter_label.grid(row=10, column=0, padx=(27,5), pady=(25,0))
+
+    #create show_one query button
+    b4= Button(enter, text="Show Record", font=('Calibri',10), relief=GROOVE, bg=bg_color, fg='black', command=entry_1)
+    b4.grid(row=11, column=0, columnspan=2, pady=5, padx=10, ipadx=100)
+
+    #create close window button
+    bu= Button(enter, text="Close Window", font=('Calibri',10), relief=GROOVE, bg=bg_color, fg='black', command=enter_close)
+    bu.grid(row=12, column=0, columnspan=2, pady=5, padx=10, ipadx=100)
+
+    con.close()
+
 # labels
-h_label=Label(root, text="HORIZON DIAGNOSTIC CENTRE", font=('Algerian',30), bg=bg_color, fg='white')
+h_label=Label(root, text="PATHOLOGY MANAGEMENT", font=('Arial Bold',40) , fg="black")
 h_label.grid(row=0, column=1, padx=40, pady=20)
 
-main_label=Label(root, text="Main Functions of our Lab", font=('Algerian',20), bg=bg_color, fg='white')
+main_label=Label(root, text="ADMINISTRATOR WINDOW", font=('Arial',30, "bold"), fg='black')
 main_label.grid(row=1, column=1, padx=40, pady=(10,5))
 
 #create add data Button
-b1= Button(root, text="Add Patient Record", font=('Comic Sans Ms',10,"bold"), relief=GROOVE, bg=bg_color, fg='white', command=add_data)
+b1= Button(root, text="Add Patient Record", font=('Arial Bold',10,"bold"), relief=GROOVE, fg='black', command=add_data)
 b1.grid(row=7, column=1, ipadx=108.3, pady=(20,14))
 
 #create show_all query button
-b3= Button(root, text="Show all Patients' List", font=('Comic Sans Ms',10,"bold"), relief=GROOVE, bg=bg_color, fg='white', command=show_all)
+b3= Button(root, text="Show all Patients' List", font=('Arial Bold',10,"bold"), relief=GROOVE, fg='black', command=show_all)
 b3.grid(row=8, column=1, ipadx=99.5, pady=14)
 
 #create show_one query button
-b4= Button(root, text="Show Patient's Summary", font=('Comic Sans Ms',10,"bold"), relief=GROOVE, bg=bg_color, fg='white', command=show_one2)
+b4= Button(root, text="Show Patient's Summary", font=('Arial Bold',10,"bold"), relief=GROOVE, fg='black', command=show_one2)
 b4.grid(row=11, column=1, ipadx=93, pady=14)
 
 #create delete button
-b5= Button(root, text="Delete Patient Record", font=('Comic Sans Ms',10,"bold"), relief=GROOVE, bg=bg_color, fg='white', command=delete1)
+b5= Button(root, text="Delete Patient Record", font=('Arial',10,"bold"), relief=GROOVE, fg='black', command=delete1)
 b5.grid(row=21, column=1, ipadx=100, pady=14)
 
 #create update button
-b6= Button(root, text="Update Patient Record", font=('Comic Sans Ms',10,"bold"), relief=GROOVE, bg=bg_color, fg='white', command=update1)
+b6= Button(root, text="Update Patient Record", font=('Arial Bold',10,"bold"), relief=GROOVE, fg='black', command=update1)
 b6.grid(row=23, column=1, ipadx=99., pady=14)
 
 #create about button
-b7= Button(root, text="(i) Learn More About Horizon Diagnostics", font=('Comic Sans Ms',10,"bold"), relief=GROOVE, bg=bg_color, fg='white', command=about)
-b7.grid(row=24, column=1, ipadx=40, pady=(20,14))
+b7= Button(root, text="(i) Learn More about this System", font=('Arial Bold',10,"bold"), relief=GROOVE, fg='black', command=about)
+b7.grid(row=25, column=1, ipadx=73, pady=(20,14))
 
 #create exit button
-b8= Button(root, text="EXIT DIAGNOSTICS", font=('Comic Sans Ms',10,"bold"), relief=GROOVE, bg=bg_color, fg='white', command=close1)
-b8.grid(row=25, column=1, ipadx=102, pady=(14, 23))
+b8= Button(root, text="Exit System", font=('Arial Bold',10,"bold"), relief=GROOVE, fg='black', command=close1)
+b8.grid(row=26, column=1, ipadx=130, pady=(14, 23))
 
 #create bill summary button
-bs= Button(root, text="Pay Bill", font=('Comic Sans Ms',10,"bold"), relief=GROOVE, bg=bg_color, fg='white', command=billw1)
+bs= Button(root, text="Pay Bill", font=('Arial Bold',10,"bold"), relief=GROOVE, fg='black', command=billw1)
 bs.grid(row=12, column=1, ipadx=144, pady=14)
 
-root.mainloop()
+#create receipt generation button
+bs= Button(root, text="Generate Receipt", font=('Arial Bold',10,"bold"), relief=GROOVE, fg='black', command=enter_id)
+bs.grid(row=24, column=1, ipadx=116, pady=14)
 
+
+root.mainloop()
