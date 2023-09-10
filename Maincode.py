@@ -55,7 +55,7 @@ def close1():
 #about us
 def about():
     ab=Toplevel()
-    ab.title('About us')
+    ab.title('About you')
     ab.iconbitmap('D:/info.ico')
     ab.configure(bg=bg_color) 
     ab.geometry('1200x600')
