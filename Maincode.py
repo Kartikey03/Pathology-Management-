@@ -5,7 +5,7 @@ from tkinter import *  #importing all modules from tkinter library
 from tkinter import messagebox  #importing messagebox module from tkinter
 from PIL import Image, ImageTk, ImageFilter #importing all modules from PIL library
 import mysql.connector #importing mysql connector module
-con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003') #connection object
+con=mysql.connector.connect(host ='localhost', user ='root', password ='12345') #connection object
 cur=con.cursor() #cursor object
 
 pbill1 = "Payment Done"
