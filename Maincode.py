@@ -129,7 +129,7 @@ The project aims to provide a comprehensive and efficient solution for streamlin
     
 #update query
 def edit():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
     
     pid = pu_id.get()
@@ -165,7 +165,7 @@ def update2():
         editor.geometry("750x450")
         editor.configure(bg=bg_color)
 
-        con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+        con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
         cur=con.cursor()
 
         cur.execute("select * from pat where id = " + update_box.get())
@@ -258,7 +258,7 @@ def update1():
    
 #delete query
 def delete2():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
     
     if delete_box.get() == '':
@@ -286,7 +286,7 @@ def delete1():
     del1.geometry("500x120")
     del1.configure(bg=bg_color)
 
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
 
     global delete_box
@@ -309,7 +309,7 @@ def show_all():
     show.iconbitmap('D:/lab.ico')
     show.configure(bg=bg_color)
 
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
 
     cur.execute("select * from pat")
@@ -354,7 +354,7 @@ def entry_1():
     if enter_box.get() == '':
         messagebox.showerror('Error !', 'Patient Id not Provided !')
     else:
-        con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+        con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
         cur=con.cursor()
 
         cur.execute("select * from pat where id= " + enter_box.get())
@@ -459,7 +459,7 @@ def show_one1():
         show1.iconbitmap('D:/lab.ico')
         show1.configure(bg=bg_color)
         
-        con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+        con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
         cur=con.cursor()
 
         cur.execute("select * from pat where id= " + show_box.get())
@@ -554,7 +554,7 @@ def show_one2():
     show2.geometry("500x140")
     show2.configure(bg=bg_color)
 
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
 
     global show_box
@@ -577,7 +577,7 @@ def show_one2():
 
 #submit function for people who have not done the payment
 def submit_pn():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
 
     #getting the data from the database 
@@ -604,7 +604,7 @@ def submit_pn():
     con.close()
 #submit function for people who have done the payment
 def submit_pd():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
 
     #getting the data from the database 
@@ -762,7 +762,7 @@ You Can Now Pay your Bill on our reception via Cash
 
 #window for selecting mode of payment  
 def billw3():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
     
     cur.execute("Update pat set bill =" + "'Payment Done'" + " where id =" + bill_box.get())
@@ -801,7 +801,7 @@ def billw2():
         messagebox.showerror('Error !', 'Patient Id Not Provided !')
         bw1.destroy()
     else:
-        con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+        con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
         cur=con.cursor()
 
         cur.execute("select * from pat where id =" + bill_box.get())
@@ -839,7 +839,7 @@ def billw1():
     bw1.iconbitmap('D:/lab.ico')
     bw1.geometry("500x120")
     bw1.configure(bg=bg_color)
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
 
     global bill_box
@@ -1038,7 +1038,7 @@ def total():
     submit_pd()
 #showing bill summary   
 def bills():
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
 
     global bill_list
@@ -1790,7 +1790,7 @@ def add_data():
     add.geometry("550x350")
     add.configure(bg=bg_color)
 
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
     global pa_id
     global pa_name
@@ -1852,7 +1852,7 @@ def enter_id():
     enter.geometry("500x140")
     enter.configure(bg=bg_color)
 
-    con=mysql.connector.connect(host ='localhost', user ='root', password ='@kiman2003', database='pathlab')
+    con=mysql.connector.connect(host ='localhost', user ='root', password ='12345', database='pathlab')
     cur=con.cursor()
 
     global enter_box
