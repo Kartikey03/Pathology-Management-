@@ -1,0 +1,19 @@
+# requirements.txt
+
+# Python version
+python>=3.6,<4.0
+
+# Web browser
+webbrowser==0.5.1
+
+# Date
+datetime==4.3
+
+# Tkinter for GUI
+tk==8.6.10
+
+# Pillow for PIL
+Pillow==8.3.1
+
+# MySQL Connector
+mysql-connector-python==8.0.28
