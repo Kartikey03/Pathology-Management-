@@ -57,9 +57,9 @@ Execute the following command to run the Pathology Lab Management System:
 python main.py
 ```
 
-**Explore the GUI:**
-- Once the application is running, explore the user-friendly GUI to manage patient records and payments efficiently.
+## Explore the GUI
+Once the application is running, explore the user-friendly GUI to manage patient records and payments efficiently.
 
-**Contributions**
-- Contributions are welcome! If you find issues or want to add features, please create a pull request or open an issue on the GitHub repository.
-- Thank you for using the Pathology Lab Management System! If you have any questions or feedback, feel free to reach out.
+## Contributions
+Contributions are welcome! If you find issues or want to add features, please create a pull request or open an issue on the GitHub repository.
+Thank you for using the Pathology Lab Management System! If you have any questions or feedback, feel free to reach out.
