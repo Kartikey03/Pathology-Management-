@@ -37,3 +37,29 @@ To run the Pathology Lab Management System on your local system, follow these st
 1. **Clone the Repository:**
    ```bash
    git clone https://github.com/your-username/pathology-lab-management.git
+
+2. **Navigate to the Project Directory**
+   ```bash
+   cd pathology-lab-management
+   ```
+3. **Install Dependencies:**
+   Ensure you have Python and Tkinter installed. You can install Python dependencies using:
+   ```bash
+   pip install -r requirements.txt
+   
+4. **Set Up MySQL Database:**
+   Install MySQL on your system if not already installed.
+   Create a database and configure the connection in the config.py file.
+   
+5. **Run the Application:**
+Execute the following command to run the Pathology Lab Management System:
+```bash
+python main.py
+```
+
+**Explore the GUI:**
+- Once the application is running, explore the user-friendly GUI to manage patient records and payments efficiently.
+
+**Contributions**
+- Contributions are welcome! If you find issues or want to add features, please create a pull request or open an issue on the GitHub repository.
+- Thank you for using the Pathology Lab Management System! If you have any questions or feedback, feel free to reach out.
